@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" context="IE=9">
+<meta charset="UTF-8">
+
+<!-- JQuery package --->
+
+<script type="text/javascript" src="./CSC_541_ Assignment_3_files/jquery-1.9.1.min.js"></script><style type="text/css"></style>
+
+<!-- Google Code hyphenator -->
+
+<script type="text/javascript" src="./CSC_541_ Assignment_3_files/hyphenate.js"></script>
+
+<!-- Google fonts stuff -->
+
+<link rel="stylesheet" type="text/css" href="./CSC_541_ Assignment_3_files/css">
+<link rel="stylesheet" type="text/css" href="./CSC_541_ Assignment_3_files/css(1)">
+<link rel="stylesheet" type="text/css" href="./CSC_541_ Assignment_3_files/css(2)">
+
+<!-- Course page CSS and JS -->
+
+<link type="text/css" href="./CSC_541_ Assignment_3_files/course.css" rel="stylesheet">
+<script type="text/javascript" src="./CSC_541_ Assignment_3_files/mod-date.js"></script>
+
+
+<title>CSC 541: Assignment 3</title>
+</head>
+
+<body bgcolor="white" class="hyphenate">
+
+<div style="text-align: center;">
+<span style="
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 1200px;
+  height: 300px;
+  background-image: url( &#39;../hdd.png&#39; );
+  background-repeat: no-repeat;
+">
+<div style="
+  position: absolute;
+  align: left;
+  text-align: left;
+  top: 40px;
+  left: 10px;
+  font-family: &#39;Trebuchet MS&#39;, Helvetica, sans-serif;
+  font-size: 16pt;
+  font-weight: normal;
+  color: black;
+  filter: alpha(opacity=80);
+  opacity: .8;
+">
+  <a href="http://www.csc.ncsu.edu/faculty/healey/csc541/index.html">CSC 541</a><br>
+  As­sign­ment 3
+  <div style="padding-top: .3em; font-size: 10pt;">
+    Disk-Based Merge­sort
+  </div>
+</div>
+<div style="
+  position: absolute;
+  align: left;
+  top: 0px;
+  left: 0px;
+">
+  <a href="http://www.ncsu.edu/">
+  <img src="./CSC_541_ Assignment_3_files/nc-state-logo.png" style="border-style: none">
+  </a>
+</div>
+</span>
+</div>
+
+<!--Spacer after image of one "line"-->
+
+<div style="height: 1em;"></div>
+
+
+<h2>In­tro­duc­tion</h2>
+
+<p>The goals of this as­sign­ment are two-fold:</p>
+
+<ol>
+
+<li>To in­tro­duce you to sort­ing data on disk using merge­sort.
+
+</li><li>To com­pare the per­for­mance of dif­fer­ent al­go­rithms for cre­at­ing
+and merg­ing runs dur­ing merge­sort.
+
+</li></ol>
+
+<h2>Index File</h2>
+
+<p>Dur­ing this as­sign­ment you will sort a bi­nary index file of in­te­ger
+key val­ues. The val­ues are stored in the file in a ran­dom order. You
+will use a merge­sort to pro­duce a sec­ond index file whose key val­ues
+are sorted in as­cend­ing order.</p>
+
+<h2>Pro­gram Ex­e­cu­tion</h2>
+
+<p>Your pro­gram will be named <code>assn_3</code> and it will run from
+the com­mand line. Three com­mand line ar­gu­ments will be spec­i­fied: a
+merge­sort method, the name of the input index file, and the name of
+the sorted out­put index file.</p>
+
+<div class="codeblock" style="margin-top: 8px;">
+ass­n_3 merge­sort-method in­dex-file sorted-in­dex-file
+</div>
+
+<p>Your pro­gram must sup­port three dif­fer­ent merge­sort meth­ods.</p>
+
+<div style="margin-top: 12px; margin-bottom: 12px;">
+<table style="margin-left: 7.5%; margin-right: 7.5%;">
+<tbody><tr>
+  <td style="border-width: 0px; padding: 0px 8px 8px 0px;">1.</td>
+  <td style="border-width: 0px; white-space: nowrap; padding: 0px;">
+    <code>--basic</code>
+  </td>
+  <td style="border-width: 0px; padding: 0px 0px 0px 8px; text-align: justify;">
+    Split the index file into sorted runs stored on disk, then merge
+    the runs to pro­duce a sorted index file.
+  </td>
+</tr>
+
+<tr>
+  <td style="border-width: 0px; padding: 0px 8px 8px 0px;">2.</td>
+  <td style="border-width: 0px; white-space: nowrap; padding: 0px; ">
+    <code>--multistep</code>
+  </td>
+  <td style="border-width: 0px; padding: 0px 0px 0px 8px; text-align: justify;">
+    Split the index file into sorted runs. Merge sub­sets of runs to
+    cre­ate su­per-runs, then merge the su­per-runs to pro­duce a sorted
+    index file.
+  </td>
+
+</tr><tr>
+  <td style="border-width: 0px; padding: 0px 8px 8px 0px;">3.</td>
+  <td style="border-width: 0px; white-space: nowrap; padding: 0px; ">
+    <code>--replacement</code>
+  </td>
+  <td style="border-width: 0px; padding: 0px 0px 0px 8px; text-align: justify;">
+    Split the index file into sorted runs cre­ated using re­place­ment
+    se­lec­tion, then merge the runs to pro­duce a sorted index file.
+  </td>
+</tr>
+</tbody></table>
+</div>
+
+<p>For ex­am­ple, ex­e­cut­ing your pro­gram as fol­lows</p>
+
+<div class="codeblock" style="margin-top: 8px;">
+ass­n_3 --mul­ti­step input.​bin sort.​bin
+</div>
+
+<p>would apply a mul­ti­step merge­sort to <code>input.bin</code> to sort
+it as­cend­ing by key value. The re­sult would be stored
+in <code>sort.bin</code>.</p>
+
+<p><b>Note.</b> For con­ve­nience, we refer to the input index file
+as <code>input.bin</code> and the out­put sorted index file
+as <code>sort.bin</code> through­out the re­main­der of the
+as­sign­ment.</p>
+
+
+<h2>Avail­able Mem­ory</h2>
+
+<p>Merge­sort's run sizes and merge per­for­mance de­pend on the amount of
+mem­ory avail­able for run cre­at­ing and merg­ing runs.</p>
+
+<p>Your pro­gram will be as­signed one input buffer for read­ing data
+(<i>e.g.</i>, blocks of keys dur­ing run cre­ation of parts of runs
+dur­ing merg­ing). The input buffer must be sized to hold a max­i­mum of
+1000 in­te­ger keys.</p>
+
+<p>Your pro­gram will also be as­signed one out­put buffer for writ­ing
+data (<i>e.g.</i>, sorted blocks of keys dur­ing run cre­ation or sorted
+sub­sets of <code>sort.bin</code> dur­ing merg­ing). The out­put buffer
+must be sized to hold a max­i­mum of 1000 in­te­ger keys.</p>
+
+
+<h2>Basic Merge­sort</h2>
+
+<p>If your pro­gram sees the merge method <code>--basic</code>, it will
+im­ple­ment a stan­dard merge­sort of the keys in <code>input.bin</code>.
+The pro­gram should per­form the fol­low­ing steps.</p>
+
+<ol>
+
+<li>Open <code>input.bin</code> and read its con­tents in 1000-key
+blocks using the input buffer.
+
+</li><li>Sort each block and write it to disk as a run file. You can use
+any in-mem­ory sort­ing al­go­rithm you want (e.g.,
+C's <code>qsort()</code> func­tion). Name each run
+file <code>index-file.<i>n</i></code>, where <code><i>n</i></code> is
+a 3-digit run iden­ti­fier, start­ing at 0. For ex­am­ple, if the input
+index file is <code>input.bin</code>, the run files would be named
+
+<div class="codeblock" style="margin-left: 0px; margin-top: 0px; margin-bottom: 8px;">
+input.​bin.000
+input.​bin.001
+input.​bin.002
+ ...
+</div>
+
+
+</li><li>Open each run file and buffer part of its con­tents into the input
+buffer. The amount of each run you can buffer will de­pend on how many
+runs you are merg­ing (<i>e.g.</i>, merg­ing 50 runs using the 1000-key
+input buffer al­lows you to buffer 20 keys per run).
+
+</li><li>Merge the runs to pro­duce sorted out­put. Use the out­put buffer to
+write the re­sults in 1000-key chunks as bi­nary data
+to <code>sort.bin</code>.
+
+</li><li>When­ever a run's buffer is ex­hausted, read an­other block from the
+run file. Con­tinue until all run files are ex­hausted.
+
+</li></ol>
+
+<p>You must record how much time it takes to com­plete the basic
+merge­sort. This in­cludes run cre­ation, merg­ing, and writ­ing the
+re­sults to <code>sort.bin</code>.</p>
+
+<p><b>Note.</b> You will never be asked to merge more than 1000 runs
+in Step 3. This guar­an­tees there will al­ways be enough mem­ory to
+as­sign a non-empty buffer to each run.</p>
+
+
+<h2>Mul­ti­step Merge­sort</h2>
+
+<p>If your pro­gram sees the merge method <code>--multistep</code>, it
+will im­ple­ment a two-step merge­sort of the keys
+in <code>input.bin</code>.  The pro­gram should per­form the fol­low­ing
+steps.</p>
+
+<ol>
+
+<li>Cre­ate the ini­tial runs for <code>input.bin</code>, ex­actly like
+the basic merge­sort.
+
+</li><li>Merge a set of 15 runs to pro­duce a su­per-run. Open the first 15
+run files and buffer them using your input buffer. Merge the 15 runs
+to pro­duce sorted out­put, using your out­put buffer to write the
+re­sults as bi­nary data to a su­per-run file.
+
+</li><li>Con­tinue merg­ing sets of 15 runs until all of the runs have been
+processed. Name each su­per-run
+file <code>index-file.super.<i>n</i></code>,
+where <code><i>n</i></code> is a 3-digit su­per-run iden­ti­fier,
+start­ing at 0. For ex­am­ple, if the input file
+is <code>input.bin</code>, the su­per-run files would be named
+
+<div class="codeblock" style="margin-left: 0px; margin-top: 0px; margin-bottom: 8px;">
+input.​bin.​super.000
+input.​bin.​super.001
+input.​bin.​super.002
+ ...
+</div>
+
+<div style="margin-top: 2px;">
+<b>Note.</b> If the num­ber of runs cre­ated in Step 1 is not evenly
+di­vis­i­ble by 15, the final su­per-run will merge fewer than 15 runs.
+</div>
+
+</li><li>Merge all of the su­per-runs to pro­duce sorted out­put. Use the
+input buffer to read part of the con­tents of each su­per-run. Use the
+out­put buffer to write the re­sults in 1000-key chunks as bi­nary data
+to <code>sort.bin</code>.
+
+</li></ol>
+
+<p>You must record how much time it takes to com­plete the mul­ti­step
+merge­sort. This in­cludes ini­tial run cre­ation, merg­ing to cre­ate
+su­per-runs, merg­ing su­per-runs, and writ­ing the re­sults
+to <code>sort.bin</code>.</p>
+
+<p><b>Note.</b> You will never be asked to merge more than 1000
+su­per-runs in Step 3. This guar­an­tees there will al­ways be enough
+mem­ory to as­sign a non-empty buffer to each su­per-run.</p>
+
+<h2>Re­place­ment Se­lec­tion Merge­sort</h2>
+
+<p>If your pro­gram sees the merge method <code>--replacement</code>,
+it will im­ple­ment a merge­sort that uses re­place­ment se­lec­tion to
+cre­ate runs from the val­ues in <code>input.bin</code>. The pro­gram
+should per­form the fol­low­ing steps.</p>
+
+<ol>
+
+<li>Di­vide your input buffer into two parts: 750 en­tries are re­served
+for a heap <i>H</i><sub>1</sub> ... <i>H</i><sub>750</sub>, and 250
+en­tries are re­served as an input buffer <i>B</i><sub>1</sub>
+... <i>B</i><sub>250</sub> to read keys from <code>input.bin</code>.
+
+</li><li>Read the first 750 keys from <code>input.bin</code> into <i>H</i>,
+and the next 250 keys into <i>B</i>. Re­arrange <i>H</i> so it forms an
+as­cend­ing heap.
+
+</li><li>Ap­pend <i>H</i><sub>1</sub> (the small­est value in the heap) to
+the cur­rent run, man­aged through the out­put buffer. Use re­place­ment
+se­lec­tion to de­ter­mine where to place <i>B</i><sub>1</sub>.
+
+<ul class="sub">
+
+<li>If <i>H</i><sub>1</sub> ≤ <i>B</i><sub>1</sub>, re­place
+<i>H</i><sub>1</sub> with <i>B</i><sub>1</sub>.
+
+</li><li>If <i>H</i><sub>1</sub> &gt; <i>B</i><sub>1</sub>, re­place
+<i>H</i><sub>1</sub> with <i>H</i><sub>750</sub>, re­duc­ing the size
+of the heap by one. Re­place <i>H</i><sub>750</sub> with
+<i>B</i><sub>1</sub>, in­creas­ing the size of the sec­ondary heap by
+one.
+
+</li></ul>
+
+Ad­just <i>H</i><sub>1</sub> to re­form <i>H</i> into a heap.
+
+</li><li>Con­tinue re­place­ment se­lec­tion until <i>H</i> is empty, at which
+point the cur­rent run is com­pleted. The sec­ondary heap will be full,
+so it re­places <i>H</i>, and a new run is started.
+
+</li><li>Run cre­ation con­tin­ues until all val­ues in <code>input.bin</code>
+have been processed. Name the runs ex­actly as you did for the basic
+merge­sort
+(<i>i.e.</i>, <code>input.bin.000</code>, <code>input.bin.001</code>,
+and so on).
+
+</li><li>Merge the runs to pro­duce sorted out­put, ex­actly like the merge
+step in the basic merge­sort.
+
+</li></ol>
+
+<p>You must record how much time it takes to com­plete the re­place­ment
+se­lec­tion merge­sort. This in­cludes re­place­ment se­lec­tion run cre­ation,
+merg­ing the re­place­ment se­lec­tion runs, and writ­ing the re­sults
+to <code>sort.bin</code>.</p>
+
+<p><b>Note.</b> You will never be asked to merge more than 1000 runs
+in Step 6. This guar­an­tees there will al­ways be enough mem­ory to
+as­sign a non-empty buffer to each run.</p>
+
+
+<h2>Pro­gram­ming En­vi­ron­ment</h2>
+
+<p>All pro­grams must be writ­ten in C, and com­piled to run on
+the <code>remote.eos.ncsu.edu</code> Linux server. Any ssh client can
+be used to ac­cess your Unity ac­count and AFS stor­age space on this
+ma­chine.</p>
+
+
+<h4>Mea­sur­ing Time</h4>
+
+<p>The sim­plest way to mea­sure ex­e­cu­tion time is to use
+<code>gettimeofday()</code> to query the cur­rent time at ap­pro­pri­ate
+lo­ca­tions in your pro­gram.</p>
+
+<div class="codeblock" style="margin-top: 8px;">
+#in­clude &lt;sys/time.h&gt;
+
+struct timeval tm;
+
+get­time­of­day( &amp;tm, NULL );
+printf( "Sec­onds: %d\n", tm.​tv_sec );
+printf( "Mi­crosec­onds: %d\n", tm.​tv_usec );
+</div>
+
+<p>Com­par­ing <code>tv_sec</code> and <code>tv_usec</code> for
+two <code>timeval</code> structs will allow you to mea­sure the amount
+of time that's passed be­tween two <code>gettimeofday()</code>
+calls.</p>
+
+
+<a name="writing_results">
+<h4>Writ­ing Re­sults</h4>
+</a>
+
+<p>Sorted keys must be writ­ten to <code>sort.bin</code> as bi­nary
+in­te­gers. C's built-in file writ­ing op­er­a­tions allow this to be done
+very eas­ily.</p>
+
+<div class="codeblock" style="margin-top: 0px;">
+#in­clude &lt;stdio.h&gt;
+
+FILE *fp;                  /* Out­put file stream */
+int   out­put_buf[ 1000 ];  /* Out­put buffer */
+
+fp = fopen( "sort.​bin", "wb" );
+fwrite( out­put_buf, sizeof( int ), 1000, fp );
+fclose( fp );
+</div>
+
+<p>Your pro­gram must also print the total ex­e­cu­tion time for the
+merge­sort it per­forms as a sin­gle line on-screen. As­sum­ing the
+ex­e­cu­tion time is held in a <code>timeval</code> struct called
+<code>exec_tm</code>, use the fol­low­ing <code>printf</code> state­ment
+to do this.</p>
+
+<div class="codeblock" style="margin-top: 0px;">
+printf( "Time: %ld.%06ld", ex­ec_tm.tv_sec, ex­ec_tm.tv_usec );
+</div>
+
+<p>Your as­sign­ment will be run au­to­mat­i­cally, and the out­put it
+pro­duces will be com­pared to known, cor­rect out­put
+using <code>diff</code>. Be­cause of this, <b>your out­put must con­form
+to the above re­quire­ments ex­actly</b>. If it doesn't,
+<code>diff</code> will re­port your out­put as in­cor­rect, and it will be marked
+ac­cord­ingly.</p>
+
+
+<a name="supplemental_material">
+<h2>Sup­ple­men­tal Ma­te­r­ial</h2>
+</a>
+
+<p>In order to help you test your pro­gram, we pro­vide
+ex­am­ple <code>input.bin</code> and <code>sort.bin</code> files.</p>
+
+<ul>
+
+<li><a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/input.bin"><code>input.bin</code></a>, a bi­nary input
+file file con­tain­ing 250,000 keys,
+
+</li><li><a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/sort.bin"><code>sort.bin</code></a>, a bi­nary out­put file
+con­tain­ing <code>input.bin</code>'s 250,000 keys in as­cend­ing sorted
+order.
+
+</li></ul>
+
+<p>You can use <code>diff</code> to com­pare out­put from your pro­gram
+to our <a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/sort.bin"><code>sort.bin</code></a> file.
+
+</p><p>Please re­mem­ber, the files we're pro­vid­ing here are meant to serve
+as ex­am­ples only. Apart from hold­ing in­te­gers, and a guar­an­tee that
+the num­ber of runs (or su­per-runs) will not ex­ceed the input buffer's
+ca­pac­ity, <b>you can­not make any as­sump­tions</b> about the size or the
+con­tent of the input and sort files we will use to test your
+pro­gram.</p>
+
+
+<h4>Test Files</h4>
+
+<p>The fol­low­ing files were used to test your pro­gram.</p>
+
+<ul>
+<li><b>Basic:</b>
+<a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/test/basic.tgz"><code>basic.tgz</code></a>
+
+</li><li><b>Mul­ti­step:</b>
+<a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/test/multistep.tgz"><code>multistep.tgz</code></a>
+
+</li><li><b>Re­place­ment Se­lec­tion:</b>
+<a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/test/replacement.tgz"><code>replacement.tgz</code></a>
+</li></ul>
+
+<p>Each tar file con­tains three test sce­nar­ios in sep­a­rate
+sub­di­rec­to­ries: a small case, a medium case, and a large case. For
+ex­am­ple, <code>basic.tgz</code> has three
+sub­di­rec­to­ries: <code>sm</code>, <code>med</code>,
+and <code>lg</code>.
+</p>
+
+<p>Within each sub­di­rec­tory is an input file
+(<code>input-1000.bin</code>, <code>input.30000.bin</code>,
+and <code>input.99000.bin</code>, re­spec­tively), all in­ter­me­di­ate run
+files, and a final <code>sort.bin</code> sorted out­put file. We
+<code>diff</code>'d these known, cor­rect in­ter­me­di­ate run files and
+the sorted out­put file to your re­sults to test your pro­gram.
+</p>
+
+<p><code>diff</code> will only tell you if two bi­nary files are the
+same or dif­fer­ent. It will not tell you where they dif­fer. If you want
+to in­ves­ti­gate ex­actly <i>why</i> your bi­nary files dif­fer from ours,
+you can down­load and com­pile this pro­gram.
+</p>
+
+<ul>
+<li><a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/test/dump.c"><code>dump.c</code></a>
+</li></ul>
+
+<p>Run­ning <code>dump binfile</code> will dump the con­tents of a
+packed bi­nary in­te­ger file as text, one line per in­te­ger. You can
+redi­rect re­sults from <code>dump</code> to gen­er­ate text ver­sions of
+the two bi­nary files you want to com­pare, then <code>diff</code> those
+text files.
+</p>
+
+<div class="codeblock" style="margin-top: 8px;">
+% gcc -o dump dump.c
+% dump input.​bin.000 &gt; input.​txt.000
+% dump my-input.​bin.000 &gt; my-input.​txt.000
+% diff input.​txt.000 my-input.​txt.000
+</div>
+
+<p>
+Now, <code>diff</code> will tell you ex­actly which lines (<i>i.e.,</i>
+which in­te­gers) are dif­fer­ent.
+</p>
+
+
+<h2>Hand-In Re­quire­ments</h2>
+
+<p>Use <a href="https://wolfware.ncsu.edu/?term=current&type=complex&what=CSC%20541" target="_blank">Moo­dle</a> (the on­line as­sign­ment sub­mis­sion
+soft­ware) to sub­mit the fol­low­ing files:</p>
+
+<ul>
+
+  <li><code>assn_3</code>, a Linux ex­e­cutable of your
+  fin­ished as­sign­ment, and
+	
+  </li><li>all as­so­ci­ated source code files (these can be called any­thing
+  you want).
+
+</li></ul>
+
+<p>There are four im­por­tant re­quire­ments that your as­sign­ment must
+sat­isfy.</p>
+
+<ol>
+
+  <li>Your ex­e­cutable file must be named ex­actly as shown above. The
+  pro­gram will be run and marked elec­tron­i­cally using a script file,
+  so using a dif­fer­ent name means the ex­e­cutable will not be found,
+  and sub­se­quently will not be marked.
+
+  </li><li>Your pro­gram must be com­piled to run
+  on <code>remote.eos.ncsu.edu</code>. If we can­not run your pro­gram,
+  we will not be able to mark it, and we will be forced to as­sign you
+  a grade of 0.
+
+  </li><li>Your pro­gram must pro­duce out­put that ex­actly matches the for­mat
+  de­scribed in the <a href="http://www.csc.ncsu.edu/faculty/healey/csc541/assn_3/index.html#writing_results">Writ­ing Re­sults</a>
+  sec­tion of this as­sign­ment. If it doesn't, it will not pass our
+  au­to­matic com­par­i­son to known, cor­rect out­put.
+
+  </li><li>You must sub­mit your source code with your ex­e­cutable prior to
+  the sub­mis­sion dead­line. If you do not sub­mit your source code, we
+  can­not MOSS it to check for code sim­i­lar­ity. Be­cause of this, any
+  as­sign­ment that does in­clude source code will be as­signed a grade of
+  0.
+
+</li></ol>
+
+<!-- The mod-date span will be updated by code in course.js -->
+
+<hr class="fig_top">
+<div class="footer">
+  Up­dated <span id="mod-date">11-Nov-14</span></div>
+
+
+
+
+<!--  LocalWords:  CSC Mergesort mergesort multistep Mergesort's AFS
+ -->
+<!--  LocalWords:  sys struct timeval tm gettimeofday printf tv usec
+ -->
+<!--  LocalWords:  structs fp buf fopen wb fwrite sizeof fclose ld
+ -->
+<!--  LocalWords:  Moodle subdirectories subdirectory
+ -->
+</body></html>
